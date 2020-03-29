@@ -24,7 +24,7 @@ public class Main {
 
         for(int i = 0; i < numberOfThreads;i++){      //loop for creating threads and putting them in an array list
 
-            Thread thread = new Thread(new Runner(barrier),Integer.toString(i+1)+" THREAD");
+            Thread thread = new Thread(new ThreadTask(barrier),Integer.toString(i+1)+" THREAD");
             listOfThreads.add(thread);
         }
         for(int i=0;i<numberOfThreads;i++){           //loop to start the threads
@@ -54,12 +54,12 @@ class Barrier {
     }
 }
 
-class Runner implements Runnable {
+class ThreadTask implements Runnable {
 
     private Barrier barrier;
     private static int timeToWait;
 
-    public Runner(Barrier barrier) {
+    public ThreadTask(Barrier barrier) {
         this.barrier = barrier;
         timeToWait = 1000;                            //limit of time for the thread, to make sure that none of the threads did not go through the barrier
     }
