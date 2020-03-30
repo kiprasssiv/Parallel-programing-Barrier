@@ -54,7 +54,7 @@ class Barrier {
     }
 }
 
-class ThreadTask implements Runnable {
+class ThreadTask extends Thread{
 
     private Barrier barrier;
     private static int timeToWait;
