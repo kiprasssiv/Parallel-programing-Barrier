@@ -36,19 +36,22 @@ public class Main {
 class Barrier {
     private int numberOfThreads;                      //total amount of threads that will be used in the program
     private int threadsToWaitFor;                     // that amount of threads that did not reach a certain point so other threads have to wait
-
+    public static int sum;
     public Barrier(int numberOfThreads) {
         this.numberOfThreads = numberOfThreads;
         this.threadsToWaitFor = numberOfThreads;
     }
 
-    public synchronized void waitBarrier() throws InterruptedException {
+    public synchronized void waitBarrier(int i) throws InterruptedException {
         threadsToWaitFor--;                           //threadsToWaitFor is the amount of threads that still did not use waitBarrier() method
         if (threadsToWaitFor > 0) {
+            sum = sum + i;
             this.wait();                              //while not all threads used the waitBarrier() method, the ones that used it, had to wait
         }
         else {
+            sum = sum + i;
             threadsToWaitFor = numberOfThreads;       //when all threads use the waitBarrier() method, threadsToWaitFor value becomes the same
+            System.out.println("SUMA: " + sum);
             notifyAll();                              //all threads ar notified of the fact that all of them used waitBarrier()
         }
     }
@@ -68,11 +71,11 @@ class ThreadTask extends Thread{
     public void run() {
         try {
             for (int i = 0; i < 6; i++) {            //every thread has to make a set number of iterations and after every iteration wait for
-                Thread.sleep(timeToWait);            //the other threads
 
-                System.out.printf("%s done %d iteration\n\n", Thread.currentThread().getName(), i+1);
+                System.out.printf("%s done %d iteration\n\n", Thread.currentThread().getName(), i);
 
-                this.barrier.waitBarrier();          // thread after doing it's job waits for other threads to finish before starting the next job
+                this.barrier.waitBarrier(i);          // thread after doing it's job waits for other threads to finish before starting the next job
+
             }
             System.out.println(Thread.currentThread().getName() + " FINISHED WORK");    //shows when a thread finishes it's work
         } catch (InterruptedException e) {
